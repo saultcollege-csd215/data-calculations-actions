@@ -2,17 +2,7 @@ package megamart.functional
 
 import megamart.*
 
-import megamart.imperative.updateShippingIcons
-import megamart.imperative.updateTaxDom
 import megamart.setCartTotalDom
-
-// Action
-fun calcCartTotal() {
-    shoppingCartTotal = calcTotal(shoppingCart)                 // Reading global is an action
-    setCartTotalDom()                                           // setCartTotalDom is an action
-    updateShippingIcons()                                       // updateShippingIcons is an action
-    updateTaxDom()                                              // updateTaxDom is an action
-}
 
 // Calculation: only explicit inputs and outputs are used
 // We can now use this calculation for any purpose; not just in calcCartTotal, which does some additional work
@@ -27,7 +17,10 @@ fun calcTotal(cart: List<CartItem>): Double {
 // Action
 fun addItemToCart(name: String, price: Double) {
     addItem(shoppingCart, name, price)                      // Reading global is an action
-    calcCartTotal()                                         // calcCartTotal is an action
+    val total = calcTotal(shoppingCart)                     // Reading global is an action
+    setCartTotalDom(total)                                  // setCartTotalDom is an action
+    updateShippingIcons(shoppingCart)                       // updateShippingIcons is an action
+    updateTaxDom(total)                                     // updateTaxDom is an action
 }
 
 // Calculation: only explicit inputs and outputs
@@ -35,8 +28,8 @@ fun addItemToCart(name: String, price: Double) {
 fun addItem(cart: List<CartItem>, name: String, price: Double) = cart + CartItem(name, price)
 
 // Action
-fun updateTaxDom() {
-    setTaxDom(calcTax(shoppingCartTotal ))                  // Modifying DOM is an action
+fun updateTaxDom(total: Double) {
+    setTaxDom(calcTax(total))                  // Modifying DOM is an action
 }
 
 // Calculation: only explicit inputs and outputs
@@ -44,13 +37,11 @@ fun updateTaxDom() {
 fun calcTax(total: Double) = total * 0.13
 
 // Action
-fun updateShippingIcons() {
+fun updateShippingIcons(cart: List<CartItem>) {
     val buyButtons = getBuyButtonsDom()                     // Reading from the DOM is an action
 
     for (button in buyButtons) {
-        // There is a business rule embedded here (carts >= 20 get discounts)
-        // This code also requires the shoppingCartTotal global to be initialized before testing
-        if ( getsFreeShipping(addItem(shoppingCart, button.item.name, button.item.price)) ) {
+        if ( getsFreeShipping(addItem(cart, button.item.name, button.item.price)) ) {
             // Can't test this without analyzing the DOM; there is no return statement that gives the answer
             button.showFreeShippingIcon()
         } else {

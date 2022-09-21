@@ -18,8 +18,8 @@ fun getBuyButtonsDom() = listOf(
         Button(CartItem("Gummy Bears", 5.99))
     )
 
-fun setCartTotalDom() {
-    println("Setting the cart total in the DOM...")
+fun setCartTotalDom(total: Double) {
+    println("Setting the cart total in the DOM to $total...")
 }
 
 fun setTaxDom(tax: Double) {

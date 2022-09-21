@@ -7,7 +7,7 @@ fun calcCartTotal() {
     for ( item in shoppingCart ) {
         shoppingCartTotal += item.price                     // Updating a global variable is an action
     }
-    setCartTotalDom()
+    setCartTotalDom(shoppingCartTotal)
     updateShippingIcons()
     updateTaxDom()
 }
