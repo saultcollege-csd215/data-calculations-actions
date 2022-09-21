@@ -1,6 +1,6 @@
 package megamart
 
-val shoppingCart = mutableListOf<CartItem>()                // Updating of global variables is an action
+var shoppingCart = mutableListOf<CartItem>()                // Updating of global variables is an action
 var shoppingCartTotal = 0.0;
 
 data class CartItem(val name: String, val price: Double)
